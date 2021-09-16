@@ -18,6 +18,7 @@ namespace Oh_Fortuna_Josefin_Persson
             int userLuckyNum = 0;
             int userBet = 0;
             int correctGuesses = 0;
+            int test = 0;                         //ta bort!
 
             while (userPix > 50)
             {
