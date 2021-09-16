@@ -1,9 +1,6 @@
-﻿using System;  //behövs
-using System.Collections.Generic;  //för att kunna använda random...
-//using System.Linq;       TA BORT?
-//using System.Text;         TA BORT?
-//using System.Threading.Tasks;       TA BORT?
-using System.Threading; // thread/paus...
+﻿using System;
+using System.Collections.Generic;
+using System.Threading;
 
 namespace Oh_Fortuna_Josefin_Persson
 {
@@ -14,93 +11,110 @@ namespace Oh_Fortuna_Josefin_Persson
             Random rnd = new Random();
 
             int userPix = 500;
-            int dice = 0;
+
             int userLuckyNum = 0;
+            bool isInputGuessNumber;
+            string inputStringGuess;
+
             int userBet = 0;
+            bool isInputBetNumber;
+            string inputStringBet;
+
+            int dice = 0;
+
             int correctGuesses = 0;
 
-            while (userPix > 50)
+            while (userPix > 50) // spelet körs så länge som spelaren har minst 50 pix
             {
-                correctGuesses = 0;  //ställer om antal korrekta tärningar inför varje kast. behövs inne i while-loopen för att återställas varje kast. 
+                correctGuesses = 0;  // återställer antal korrekta gissningar inför varje omgång
 
                 Console.WriteLine("Nu spelar vi Oh Fortuna! Skåda in i stjärnorna och välj ett lyckotal mellan 1-6...");
-                userLuckyNum = int.Parse(Console.ReadLine());       //      OBS, inte så vi lärt oss... 
+                inputStringGuess = Console.ReadLine();
+                isInputGuessNumber = int.TryParse(inputStringGuess, out userLuckyNum);
 
-                if (userLuckyNum <= 6 && userLuckyNum >= 1)    // DET GÅR ATT ANGE NEGATIVA TAL!!!
+                if (!isInputGuessNumber)  // om det inte är sant att input är en siffra
+                {
+                    wrongMessage("Ange en siffra!");
+                    continue;
+                }
+
+                if (userLuckyNum <= 6 && userLuckyNum >= 1)
                 {
                     Console.WriteLine("Du valde lyckonummer: " + userLuckyNum + "... Nu kör vi!!!");
                 }
                 else
                 {
-                    Console.WriteLine("Felaktigt värde! Välj ett tal mellan 1-6...");
-                    continue;         //för att stoppa programmet från att fortsätta med ett felaktigt tal  börjar om på while
-                }
+                    wrongMessage("Felaktigt värde! Välj ett tal mellan 1-6...");
 
+                    continue;
+                }
 
                 while (true)
                 {
-                    Console.WriteLine("Ange din insats... Du får ej satsa mer än " + userPix + " Pix.");  // DET GÅR ATT SATSA NEGATIVA TAL!!!!   -1, inte typ -4
-                    userBet = int.Parse(Console.ReadLine());
+                    Console.WriteLine("Ange din insats... Du får ej satsa mer än " + userPix + " Pix.");
+                    inputStringBet = Console.ReadLine();
+                    isInputBetNumber = int.TryParse(inputStringBet, out userBet);
+
+                    if (!isInputBetNumber)
+                    {
+                        wrongMessage("Ange en siffra!");
+                        continue;
+                    }
 
                     if (userBet > userPix)
                     {
-                        Console.WriteLine("Satsa en mindre summa!");   //break och continue? man stoppas om man gissar fel EN gång, andra gången går det igenom...
-                        continue;     // börjar om på while....
+                        wrongMessage("Satsa en mindre summa!");
+                        continue;
                     }
                     else if (userBet < 50)
                     {
-                        Console.WriteLine("Satsa mer, snåljåp!");
+                        wrongMessage("Satsa mer, snåljåp!");
                         continue;
                     }
                     else
                     {
                         Console.WriteLine("Modig satsning! Nu kör vi...");
-                        Thread.Sleep(1000); //paus 1 sek, för att öka spänningen...
+                        Thread.Sleep(1000);  // pausar programmet för ökad spänning..!
                         break;
                     }
                 }
 
-                for (int i = 0; i < 3; i++) //3 tärningskast... = 3 tärningar som kastas "samtidigt"
+                for (int i = 0; i < 3; i++) // en tärning som kastas tre gånger per omgång
                 {
-
                     dice = rnd.Next(1, 7);
                     Console.WriteLine("Tärningen visar: " + dice);
 
-                    if (dice == userLuckyNum)
+                    if (dice == userLuckyNum) // räkna antal korrekta gissningar/ korrekta tärningar
                     {
                         correctGuesses++;
                     }
-
                 }
 
                 switch (correctGuesses)
                 {
                     case 1:
-                        Console.WriteLine("Grattis, ett rätt!");
-                        userPix = userBet * (correctGuesses + 1) + userPix;
+                        happyMessage("Grattis, ett rätt!");
+                        userPix = userBet * (correctGuesses + 1) + userPix;  // satsningen gånger antal korrekta gissningar+1 + användarens nuvarande pix
                         Console.WriteLine("Du har nu " + userPix + " Pix!");
-
                         break;
                     case 2:
-                        Console.WriteLine("Grattis, TVÅ rätt!");
+                        happyMessage("Grattis, TVÅ rätt!");
                         userPix = userBet * (correctGuesses + 1) + userPix;
                         Console.WriteLine("Du har nu " + userPix + " Pix!");
-
                         break;
-
                     case 3:
-                        Console.WriteLine("WOHOO, ALLA RÄTT!!!");
+                        happyMessage("WOHOO, ALLA RÄTT!!!");
                         userPix = userBet * (correctGuesses + 1) + userPix;
                         Console.WriteLine("Du har nu " + userPix + " Pix!");
                         break;
-
                     default:
-                        Console.WriteLine("Sorry, inga rätt...");
+                        wrongMessage("Sorry, inga rätt...");
                         userPix -= userBet;
                         Console.WriteLine("Du har nu " + userPix + " Pix kvar.");
+
                         if (userPix < 50)
                         {
-                            Console.WriteLine("Du förlorade, spelet är slut.");
+                            wrongMessage("Du förlorade, spelet är slut.");
                         }
                         break;
                 }
@@ -112,10 +126,10 @@ namespace Oh_Fortuna_Josefin_Persson
 
                     if (userAnswer == "Ja")
                     {
-                        Console.Clear();
+                        Console.Clear();  // rensar konsollen mellan varje omgång
                         continue;
                     }
-                    else if (userAnswer == "Nej")       //behövs?
+                    else if (userAnswer == "Nej")
                     {
                         break;
                     }
@@ -123,16 +137,25 @@ namespace Oh_Fortuna_Josefin_Persson
                     {
                         Console.WriteLine("Svara 'Ja' eller 'Nej'");
                         userAnswer = Console.ReadLine();
-                       Console.Clear();                 
+                        Console.Clear();
                     }
                 }
             }
         }
+
+        private static void wrongMessage(string message) // metod för felmeddelanden
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine(message);
+            Console.ForegroundColor = ConsoleColor.White;
+        }
+
+        private static void happyMessage(string message) // metod för glada meddelanden
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine(message);
+            Console.ForegroundColor = ConsoleColor.White;
+        }
     }
 }
-
-    // TODO:
-    // metoder?
-    // roliga färger?
-    // rensa using system-listan...?
 
