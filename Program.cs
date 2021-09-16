@@ -18,7 +18,6 @@ namespace Oh_Fortuna_Josefin_Persson
             int userLuckyNum = 0;
             int userBet = 0;
             int correctGuesses = 0;
-            int test = 0;                         //ta bort!
 
             while (userPix > 50)
             {
@@ -124,6 +123,7 @@ namespace Oh_Fortuna_Josefin_Persson
                     {
                         Console.WriteLine("Svara 'Ja' eller 'Nej'");
                         userAnswer = Console.ReadLine();
+                       Console.Clear();                 
                     }
                 }
             }
@@ -132,9 +132,6 @@ namespace Oh_Fortuna_Josefin_Persson
 }
 
     // TODO:
-    // man kan välja negativa lyckotal
-    // man kan välja negativa satsningar, om man väljer en negativ satsning 2 ggr i rad.......
-    // spelet fortsätter om man gissar fel 2 ggr i rad..!
     // metoder?
     // roliga färger?
     // rensa using system-listan...?
