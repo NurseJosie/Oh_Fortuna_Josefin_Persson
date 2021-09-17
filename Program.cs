@@ -45,7 +45,6 @@ namespace Oh_Fortuna_Josefin_Persson
                 else
                 {
                     wrongMessage("Felaktigt värde! Välj ett tal mellan 1-6...");
-
                     continue;
                 }
 
@@ -84,7 +83,7 @@ namespace Oh_Fortuna_Josefin_Persson
                     dice = rnd.Next(1, 7);
                     Console.WriteLine("Tärningen visar: " + dice);
 
-                    if (dice == userLuckyNum) // räkna antal korrekta gissningar/ korrekta tärningar
+                    if (dice == userLuckyNum) // räknar antal korrekta gissningar/ korrekta tärningar
                     {
                         correctGuesses++;
                     }
